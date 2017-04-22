@@ -26,6 +26,7 @@ RUN apt-get update \
   && rm percona-release_0.1-4.jessie_all.deb \
   && apt-get update \
   && apt-get install pmm-client \
+	&& cp -a /usr/local/percona/pmm-client/* /usr/src/ \
   && rm -rf /var/lib/apt/lists/* /tmp/*
 
 COPY docker-entrypoint.sh /usr/local/bin/

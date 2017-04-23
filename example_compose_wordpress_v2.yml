@@ -1,0 +1,56 @@
+version: '2'
+
+services:
+  db:
+    image: jorgeandrada/mariadb-pmm:latest
+    volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/timezone:/etc/timezone:ro
+    restart: always
+    depends_on:
+     - pmmserver
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    #  MYSQL_ROOT_PASSWORD: wordpress
+    #  MYSQL_DATABASE: wordpress
+    #  MYSQL_USER: wordpress
+    #  MYSQL_PASSWORD: wordpress
+
+  wordpress:
+   depends_on:
+     - db
+   image: wordpress:latest
+   ports:
+     - "8082:80"
+   restart: always
+   environment:
+     WORDPRESS_DB_HOST: db:3306
+     WORDPRESS_DB_PASSWORD: root
+   volumes:
+     - /etc/localtime:/etc/localtime:ro
+     - /etc/timezone:/etc/timezone:ro
+
+  pmmserver:
+    image: percona/pmm-server
+    ports:
+      - 8081:80/tcp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  pmmclient:
+    image: jorgeandrada/pmmclient:develop
+    environment:
+      PMM_SERVER: pmmserver
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_HOST: db
+      PMM_CLIENT_PASSWORD: monitoring
+      WAITTIME: 30
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./pmm:/usr/local/percona/pmm-client
+    depends_on:
+     - pmmserver
+     - db

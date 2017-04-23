@@ -1,4 +1,9 @@
 #!/bin/bash
+# -*- ENCODING: UTF-8 -*-
+# ------------------------------------------------------------------
+# Title: Migra el historial de conversaciones gajim
+# Autor: [Jorge Andrada] [jandrada@gmail.com]
+# ------------------------------------------------------------------
 
 #copio los binarios en caso de montar volumen
 for BINARIO in /usr/src/*

@@ -5,6 +5,8 @@
 # Autor: [Jorge Andrada] [jandrada@gmail.com]
 # ------------------------------------------------------------------
 
+PMM_SERVER_PORT=80
+
 #copio los binarios en caso de montar volumen
 for BINARIO in /usr/src/*
 do
@@ -29,8 +31,8 @@ fi
 registro=0
 while  [ $registro == 0 ]; do
 	pmm-admin uninstall
-	echo -e "\nWaiting PMM Server: $PMM_SERVER"
-	pmm-admin config --server $PMM_SERVER
+	echo -e "\nWaiting PMM Server: $PMM_SERVER at port $PMM_SERVER_PORT"
+	pmm-admin config --server $PMM_SERVER:$PMM_SERVER_PORT
 	if [ $? == 0 ]; then registro=1; fi
 	sleep 10
 done
@@ -38,7 +40,7 @@ done
 #fix mysql to be online
 sleep $WAITTIME
 echo -e "\nWaiting PMM Server sync: $PMM_SERVER"
-pmm-admin add mysql --user $MYSQL_ROOT_USER --password $MYSQL_ROOT_PASSWORD --host $MYSQL_HOST --create-user --create-user-password $PMM_CLIENT_PASSWORD
+pmm-admin add mysql --user $MYSQL_ROOT_USER --password $MYSQL_ROOT_PASSWORD --host $MYSQL_HOST --create-user --create-user-password $PMM_CLIENT_PASSWORD --force
 
 #fix for exit container
 tail -f /dev/null

@@ -21,6 +21,7 @@ RUN apt-get update \
     openssl \
     ca-certificates \
     percona-toolkit \
+		mariadb-client \
   && wget https://repo.percona.com/apt/percona-release_0.1-4.jessie_all.deb \
   && dpkg -i percona-release_0.1-4.jessie_all.deb \
   && rm percona-release_0.1-4.jessie_all.deb \
